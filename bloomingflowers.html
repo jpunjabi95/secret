@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloom Your Own Flowers</title>
+  <style>
+    /* General Styling */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: rgb(32, 32, 32); /* Light blue background */
+    }
+
+    .tulip-container {
+      display: flex;
+      flex-wrap: wrap; /* Allow tulips to wrap into new lines */
+      gap: 40px; /* Increase gap between flowers */
+      justify-content: center;
+    }
+
+    .tulip {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.5s ease; /* Smooth rotation transition */
+      transform: scale(1.5); /* Scale tulips up by 1.5x */
+    }
+
+    /* Petals */
+    .petal {
+      position: absolute;
+      width: 90px; /* Adjust petal width */
+      height: 135px; /* Adjust petal height */
+      border: 2px solid black;
+      border-radius: 100% / 140% 140% 50% 50%;
+      background: #ff4d88; /* Default to red */
+      transform: scale(0); /* Start with the petals hidden */
+      transition: transform 1s ease-in-out; /* Smooth blooming transition */
+    }
+
+    .petal.top {
+        border: 2px solid black;
+        transform: scale(0);
+    }
+
+    .petal.left {
+      top: 15px;
+      left: -45px; /* Adjust offset for left petal */
+      transform: rotate(-45deg) scale(0);
+      z-index: 2;
+    }
+
+    .petal.right {
+      top: 15px;
+      right: -45px; /* Adjust offset for right petal */
+      transform: rotate(45deg) scale(0);
+      z-index: 2;
+    }
+
+    /* Stem */
+    .stem {
+      width: 25px; /* Adjust stem width */
+      height: 260px; /* Adjust stem height */
+      background: #025805;
+      margin-top: 105px; /* Adjust stem positioning */
+    }
+
+    /* Leaves */
+    .leaf {
+      position: absolute;
+      width: 60px; /* Adjust leaf width */
+      height: 90px; /* Adjust leaf height */
+      border-radius: 100% / 140% 140% 50% 50%;
+      background: #025805;
+    }
+
+    .leaf.left {
+      top: 160px; /* Adjust leaf positioning */
+      left: -45px;
+      transform: rotate(-45deg);
+    }
+
+    .leaf.right {
+      top: 160px; /* Adjust leaf positioning */
+      right: -45px;
+      transform: rotate(45deg);
+    }
+
+    /* Additional Colors */
+    .tulip.red .petal {
+      background: #ff4d4d; /* Red tulip petals */
+    }
+
+    .tulip.blue .petal {
+      background: #1e90ff; /* Blue tulip petals */
+    }
+
+    /* Rotations */
+    .tulip:nth-child(1) {
+      transform: rotate(-55deg); /* Rotate first tulip 45 degrees to the left */
+    }
+
+    .tulip:nth-child(2) {
+      transform: rotate(-25deg); /* Rotate second tulip 25 degrees to the left */
+    }
+
+    .tulip:nth-child(4) {
+      transform: rotate(25deg); /* Rotate fourth tulip 25 degrees to the right */
+    }
+
+    .tulip:nth-child(5) {
+      transform: rotate(55deg); /* Rotate fifth tulip 45 degrees to the right */
+    }
+
+    /* Hover effect to trigger bloom */
+    .tulip:hover .petal {
+        transform: scale(1); /* Make petals bloom */
+    }
+
+    .tulip:hover .petal.right {
+        transform: rotate(45deg) scale(1); /* Keep the right petal rotated */
+    }
+
+    .tulip:hover .petal.left {
+        transform: rotate(-45deg) scale(1); /* Keep the left petal rotated */
+    }
+
+    /* Add a permanent bloom class to the tulips */
+    .tulip.bloom .petal {
+      transform: scale(1); /* Make petals bloom */
+    }
+
+    .tulip.bloom .petal.right {
+      transform: rotate(45deg) scale(1); /* Keep the right petal rotated */
+    }
+
+    .tulip.bloom .petal.left {
+      transform: rotate(-45deg) scale(1); /* Keep the left petal rotated */
+    }
+
+    /* Home button styling */
+    .home-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #1e90ff;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .home-button:hover {
+      background-color: #0d6ebd;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="home-button">Home</a>
+  <div class="tulip-container">
+    <!-- Tulip 1 (Red) -->
+    <div class="tulip red" onmouseenter="this.classList.add('bloom')" onmouseleave="this.classList.add('bloom')">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+    <!-- Tulip 2 (Blue) -->
+    <div class="tulip blue" onmouseenter="this.classList.add('bloom')" onmouseleave="this.classList.add('bloom')">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+    <!-- Tulip 3 (Red) -->
+    <div class="tulip red" onmouseenter="this.classList.add('bloom')" onmouseleave="this.classList.add('bloom')">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+    <!-- Tulip 4 (Blue) -->
+    <div class="tulip blue" onmouseenter="this.classList.add('bloom')" onmouseleave="this.classList.add('bloom')">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+    <!-- Tulip 5 (Red) -->
+    <div class="tulip red" onmouseenter="this.classList.add('bloom')" onmouseleave="this.classList.add('bloom')">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+  </div>
+</body>
+</html>

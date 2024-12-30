@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DATE</title>
+  <!-- Importing a fun, cursive font -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* General Styling */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: rgb(32, 32, 32); /* Light blue background */
+      flex-direction: column; /* Make body content stack vertically */
+    }
+
+    .curved-text {
+      position: absolute;
+      top: -30px; /* Move the curved text higher */
+    }
+
+    .tulip-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow tulips to wrap into new lines */
+  gap: 40px; /* Maintain gap between flowers */
+  justify-content: center;
+  margin-top: 160px; /* Space between curved text and tulips */
+  margin-bottom: 50px; /* Increased space below the tulips */
+}
+
+    .tulip {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.5s ease; /* Smooth rotation transition */
+      transform: scale(1.2); /* Reduced scale to make tulips smaller */
+      opacity: 0; /* Initially hidden */
+      transition: opacity 2s ease, transform 1s ease-in-out; /* Delay bloom and opacity change */
+    }
+
+    /* Petals */
+    .petal {
+      position: absolute;
+      width: 90px; /* Adjust petal width */
+      height: 135px; /* Adjust petal height */
+      border: 2px solid black;
+      border-radius: 100% / 140% 140% 50% 50%;
+      background: #ff4d88; /* Default to red */
+      transform: scale(0); /* Start with the petals hidden */
+      transition: transform 1s ease-in-out; /* Smooth blooming transition */
+    }
+
+    .petal.top {
+        border: 2px solid black;
+        transform: scale(0);
+    }
+
+    .petal.left {
+      top: 15px;
+      left: -45px; /* Adjust offset for left petal */
+      transform: rotate(-45deg) scale(0);
+      z-index: 2;
+    }
+
+    .petal.right {
+      top: 15px;
+      right: -45px; /* Adjust offset for right petal */
+      transform: rotate(45deg) scale(0);
+      z-index: 2;
+    }
+
+    /* Stem */
+    .stem {
+      width: 25px; /* Adjust stem width */
+      height: 260px; /* Adjust stem height */
+      background: #025805;
+      margin-top: 105px; /* Adjust stem positioning */
+    }
+
+    /* Leaves */
+    .leaf {
+      position: absolute;
+      width: 60px; /* Adjust leaf width */
+      height: 90px; /* Adjust leaf height */
+      border-radius: 100% / 140% 140% 50% 50%;
+      background: #025805;
+    }
+
+    .leaf.left {
+      top: 160px; /* Adjust leaf positioning */
+      left: -45px;
+      transform: rotate(-45deg);
+    }
+
+    .leaf.right {
+      top: 160px; /* Adjust leaf positioning */
+      right: -45px;
+      transform: rotate(45deg);
+    }
+
+    /* Additional Colors */
+    .tulip.red .petal {
+      background: #ff4d4d; /* Red tulip petals */
+    }
+
+    .tulip.blue .petal {
+      background: #1e90ff; /* Blue tulip petals */
+    }
+
+    /* Rotations */
+    .tulip:nth-child(1) {
+      transform: rotate(-55deg); /* Rotate first tulip 45 degrees to the left */
+    }
+
+    .tulip:nth-child(2) {
+      transform: rotate(-25deg); /* Rotate second tulip 25 degrees to the left */
+    }
+
+    .tulip:nth-child(4) {
+      transform: rotate(25deg); /* Rotate fourth tulip 25 degrees to the right */
+    }
+
+    .tulip:nth-child(5) {
+      transform: rotate(55deg); /* Rotate fifth tulip 45 degrees to the right */
+    }
+
+    /* Bloom effect for automatic bloom */
+    .bloom .petal {
+        transform: scale(1); /* Make petals bloom */
+    }
+
+    .bloom .petal.right {
+        transform: rotate(45deg) scale(1); /* Keep the right petal rotated */
+    }
+
+    .bloom .petal.left {
+        transform: rotate(-45deg) scale(1); /* Keep the left petal rotated */
+    }
+
+    .bloom {
+      opacity: 1; /* Fade in the tulips */
+    }
+
+    #curve {
+        fill: transparent;
+    }
+
+    /* Fun font for curved text */
+    .text {
+        font-size: 3rem; /* Increase font size */
+        fill: white;
+        font-family: 'Dancing Script', cursive; /* Apply Dancing Script font */
+    }
+
+    /* Styling for the date text under the tulips */
+    .date-text {
+        font-size: 2rem; /* Size for the date text */
+        color: white;
+        font-family: 'Dancing Script', cursive; /* Use the same fun font */
+        margin-top: 20px; /* Space between tulips and date text */
+    }
+
+    /* Styling for the buttons */
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1.5rem;
+      font-family: 'Dancing Script', cursive;
+      cursor: pointer;
+      border: 2px solid white;
+      background-color: transparent;
+      color: white;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    /* Confetti Animation Container */
+    .confetti-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #ffeb3b;
+      opacity: 0;
+      animation: confetti-fall 2s forwards;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    button:hover {
+      background-color: white;
+      color: rgb(32, 32, 32);
+      transform: scale(1.1);
+    }
+
+    .yes-button {
+      background-color: #4CAF50;
+    }
+
+    .no-button {
+      background-color: #f44336;
+    }
+
+
+
+
+    /* Error message styling */
+    .error-message {
+      color: red;
+      font-size: 2rem;
+      font-family: 'Dancing Script', cursive;
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+
+
+
+  </style>
+</head>
+<body>
+  <div class="curved-text">
+    <svg width="1000" height="300">
+        <!-- Adjusted curve to make it wider -->
+        <path id="curve" d="M 0 200 C 250 100, 750 100, 1000 200"></path>
+        <text class="text" text-anchor="middle">
+            <textPath class="text__path" href="#curve" startOffset="50%">
+                Will you go on a date with me, Harini?
+            </textPath>
+        </text>
+    </svg>
+  </div>
+
+  <div class="tulip-container">
+    <!-- Tulip 1 (Red) -->
+    <div class="tulip red">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+    <!-- Tulip 2 (Blue) -->
+    <div class="tulip blue">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+    <!-- Tulip 3 (Red) -->
+    <div class="tulip red">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+    <!-- Tulip 4 (Blue) -->
+    <div class="tulip blue">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+    <!-- Tulip 5 (Red) -->
+    <div class="tulip red">
+      <div class="petal top"></div> 
+      <div class="petal left"></div>
+      <div class="petal right"></div>
+      <div class="stem"></div>
+    </div>
+  </div>
+
+  <!-- Date text under the tulips -->
+  <div class="date-text">
+    January 22nd @ 5:30pm
+  </div>
+    
+  <div class="buttons">
+    <button class="yes-button" id="yes-button">Yes</button>
+    <button class="no-button" id="no-button">No</button>
+  </div>
+  
+  <div id="error-message" class="error-message" style="display: none;">Oops! Please try again.</div>
+  <div id="confetti-container" class="confetti-container"></div>
+
+  <div style="margin-top: 25px;">
+    <a href="bloomingflowers.html" style="text-decoration: none;">
+      <button style="
+        padding: 10px 20px; 
+        font-size: 1.5rem; 
+        font-family: 'Dancing Script', cursive; 
+        cursor: pointer; 
+        border: 2px solid white; 
+        background-color: transparent; 
+        color: white; 
+        border-radius: 5px; 
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      ">
+        Bloom your own flowers
+      </button>
+    </a>
+  </div>
+
+
+
+  <script>
+    window.addEventListener("load", () => {
+      const tulips = document.querySelectorAll(".tulip");
+      tulips.forEach((tulip, index) => {
+        const delay = index === 2 ? 1500 : index * 500; // Add longer delay for middle tulip (3rd one)
+        setTimeout(() => {
+          tulip.classList.add("bloom"); // Trigger the bloom effect after the delay
+        }, delay);
+      });
+    });
+
+    // Select the buttons, confetti container, and error message
+    // Wait until the page has fully loaded
+    window.addEventListener("load", () => {
+      // Select the buttons, confetti container, and error message
+      const yesButton = document.getElementById('yes-button');
+  const noButton = document.getElementById('no-button');
+  const confettiContainer = document.getElementById('confetti-container');
+  const errorMessage = document.getElementById('error-message');
+
+  // Function to trigger confetti
+  function triggerConfetti() {
+    return new Promise((resolve) => {
+      confettiContainer.style.display = 'block';
+      for (let i = 0; i < 100; i++) {
+        let confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = `${Math.random() * 100}%`; // Random horizontal position
+        confetti.style.animationDelay = `${Math.random() * 2}s`; // Random delay
+        confettiContainer.appendChild(confetti);
+      }
+
+      // Hide confetti after animation completes (5 seconds)
+      setTimeout(() => {
+        confettiContainer.style.display = 'none';
+        resolve(); // Resolve the promise after confetti animation ends
+      }, 5000); // Confetti lasts for 5 seconds
+    });
+  }
+
+  // Function to display Google Calendar invite alert
+function calendarInvite() {
+  if (window.confirm('Add this to your Google Calendar!')) {
+    // Define the Google Calendar event link
+    const googleCalendarLink = "https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NWNwNWUyc2ZqbnE5aGJtbmFmZ3FsbHR2N3AganB1bmphYmkzMTRAbQ&tmsrc=jpunjabi314%40gmail.com"; // Customize as needed
+    
+    // Open the link in a new tab
+    window.open(googleCalendarLink, '_blank');
+  }
+
+
+};
+
+  // Event listener for the Yes button
+  yesButton.addEventListener('click', async () => {
+    await triggerConfetti(); // Wait for confetti to finish
+    calendarInvite(); // Show the calendar invite alert after confetti is done
+  });
+
+  // Event listener for the No button (no changes needed)
+  noButton.addEventListener('click', () => {
+    showError();
+  });
+
+  // Function to display error message
+  function showError() {
+    errorMessage.style.display = 'block';
+    setTimeout(() => {
+      errorMessage.style.display = 'none';
+    }, 3000); // Hide after 3 seconds
+  }
+
+    });
+  </script>
+
+
+</body>
+</html>
